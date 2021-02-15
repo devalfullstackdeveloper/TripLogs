@@ -3,7 +3,6 @@ package com.triplogs.user;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.LocationManager;
@@ -11,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -69,42 +67,39 @@ public class Home extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
-                switch (action) {
-                    case "locationData":
-                        String Lat = intent.getStringExtra("Lat");
-                        String Long = intent.getStringExtra("Long");
-                        String accurarcy = intent.getStringExtra("accurarcy");
-                        String timestamp = intent.getStringExtra("timestamp");
-                        String altitude = intent.getStringExtra("altitude");
-                        String heading = intent.getStringExtra("heading");
-                        String speed = intent.getStringExtra("speed");
-                        if (rippleSwitch.isChecked()) {
+                if ("locationData".equals(action)) {
+                    String Lat = intent.getStringExtra("Lat");
+                    String Long = intent.getStringExtra("Long");
+                    String accurarcy = intent.getStringExtra("accurarcy");
+                    String timestamp = intent.getStringExtra("timestamp");
+                    String altitude = intent.getStringExtra("altitude");
+                    String heading = intent.getStringExtra("heading");
+                    String speed = intent.getStringExtra("speed");
+                    if (rippleSwitch.isChecked()) {
 
-                            String alt = " " + altitude + ",";
-                            String head = " " + heading + ",";
-                            String lat = " " + Lat + ",";
-                            String longi = " " + Long + ",";
-                            String acc = " " + accurarcy + ",";
-                            String time = " " + timestamp + ",";
-                            tvAltitude.setText(alt);
-                            tvHeading.setText(head);
-                            tvLatitude.setText(lat);
-                            tvLongitude.setText(longi);
-                            tvAccuracy.setText(acc);
-                            tvTimestamp.setText(time);
+                        String alt = " " + altitude + ",";
+                        String head = " " + heading + ",";
+                        String lat = " " + Lat + ",";
+                        String longi = " " + Long + ",";
+                        String acc = " " + accurarcy + ",";
+                        String time = " " + timestamp + ",";
+                        tvAltitude.setText(alt);
+                        tvHeading.setText(head);
+                        tvLatitude.setText(lat);
+                        tvLongitude.setText(longi);
+                        tvAccuracy.setText(acc);
+                        tvTimestamp.setText(time);
 
-                            if (radioButton1.isChecked()) {
-                                tvSpeed.setText(speed);
-                            } else {
-                                float sp = (float) (Float.parseFloat(speed) / 1.609);
-                                String speeds = " " + sp;
-                                tvSpeed.setText(speeds);
-                            }
-
-
+                        if (radioButton1.isChecked()) {
+                            tvSpeed.setText(speed);
+                        } else {
+                            float sp = (float) (Float.parseFloat(speed) / 1.609);
+                            String speeds = " " + sp;
+                            tvSpeed.setText(speeds);
                         }
 
-                        break;
+
+                    }
                 }
             }
 
@@ -162,7 +157,8 @@ public class Home extends AppCompatActivity {
         radioButton2 = findViewById(R.id.radioButton2);
         tvDeviceId = findViewById(R.id.tv_device_id);
         tvVCode = findViewById(R.id.tv_v_code);
-        tvVCode.setText("V " + ApiConstant.Versions.CODE);
+        String vCode = "V " + ApiConstant.Versions.CODE;
+        tvVCode.setText(vCode);
     }
 
     @Override
@@ -193,112 +189,29 @@ public class Home extends AppCompatActivity {
                 tvTimestamp.setText("");
                 tvDeviceId.setText("");
             }
-//            if( checkOnOf()) {
-//                if (b) {
-//                    if(isLocationOn) {
-//                        SharedPrefHelper.getPrefsHelper().setData(SharedPrefHelper.PREF_IS_CHECK, "true");
-//                        cardView.setCardBackgroundColor(getResources().getColor(R.color.sky_blue));
-//                        startTrip();
-//                        startMyService();
-//
-//                        @SuppressLint("HardwareIds")
-//                        String android_id = Settings.Secure.getString(Home.this.getContentResolver(), Settings.Secure.ANDROID_ID);
-//                        tvDeviceId.setText(android_id);
-//                    }
-//                } else {
-//
-//                    SharedPrefHelper.getPrefsHelper().setData(SharedPrefHelper.PREF_IS_CHECK, "false");
-//                    cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
-//                    stopMyService();
-//                    stopTrip();
-//                    tvSpeed.setText("");
-//                    tvAltitude.setText("");
-//                    tvHeading.setText("");
-//                    tvLatitude.setText("");
-//                    tvLongitude.setText("");
-//                    tvAccuracy.setText("");
-//                    tvTimestamp.setText("");
-//                    tvDeviceId.setText("");
-//
-//                }
-//            }
+
 
         });
 
-        imgSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        imgSetting.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this);
+            LayoutInflater inflater = getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.alert_label_editor, null);
+            builder.setView(dialogView);
 
+            TextView textYes =  dialogView.findViewById(R.id.textView_yes);
+            TextView textNo =  dialogView.findViewById(R.id.textView_no);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(Home.this);
+            AlertDialog alert = builder.create();
+            alert.setCancelable(false);
+            alert.show();
+            textYes.setOnClickListener(v12 -> {
+                alert.dismiss();
+                Intent i = new Intent(Home.this, LoginScreen.class);
+                startActivity(i);
+            });
+            textNo.setOnClickListener(v1 -> alert.dismiss());
 
-//                builder.setCancelable(false);
-//                builder.setMessage(" Do you want to change your server \n configuration ? ")
-//                        .setCancelable(true)
-//                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                //   dialog.dismiss();
-////                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-////                                startActivity(browserIntent);
-//
-//                            }
-//                        })
-//
-//                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                   dialog.dismiss();
-////                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-////                                startActivity(browserIntent);
-//
-//                            }
-//                        });
-
-                LayoutInflater inflater = getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.alert_label_editor, null);
-                builder.setView(dialogView);
-
-                TextView textYes = (TextView) dialogView.findViewById(R.id.textView_yes);
-                TextView textNo = (TextView) dialogView.findViewById(R.id.textView_no);
-
-                AlertDialog alert = builder.create();
-                alert.setCancelable(false);
-                alert.show();
-                textYes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alert.dismiss();
-                        Intent i = new Intent(Home.this, LoginScreen.class);
-                        startActivity(i);
-                    }
-                });
-                textNo.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alert.dismiss();
-                    }
-                });
-//                PowerMenu dialogMenu = getDialogPowerMenu(Home.this, Home.this);
-//
-//
-//                View footerView = dialogMenu.getFooterView();
-//                TextView textView_yes = footerView.findViewById(R.id.textView_yes);
-//                textView_yes.setOnClickListener(
-//                        view -> {
-//                            //   Toast.makeText(getBaseContext(), "Yes", Toast.LENGTH_SHORT).show();
-//                            dialogMenu.dismiss();
-//                            Intent i = new Intent(Home.this, LoginScreen.class);
-//                            startActivity(i);
-//                            // finish();
-//
-//                        });
-//                TextView textView_no = footerView.findViewById(R.id.textView_no);
-//                textView_no.setOnClickListener(
-//                        view -> {
-//                            // Toast.makeText(getBaseContext(), "No", Toast.LENGTH_SHORT).show();
-//                            dialogMenu.dismiss();
-//                        });
-//                dialogMenu.showAtCenter(v);
-            }
         });
     }
 
@@ -324,11 +237,11 @@ public class Home extends AppCompatActivity {
     @SuppressLint("HardwareIds")
     private void startTrip() {
         android_id = Settings.Secure.getString(Home.this.getContentResolver(), Settings.Secure.ANDROID_ID);
-
         new StartTrip().execute();
 
     }
 
+    @SuppressLint("HardwareIds")
     private void stopTrip() {
         android_id = Settings.Secure.getString(Home.this.getContentResolver(), Settings.Secure.ANDROID_ID);
         new StopTrip().execute();
@@ -336,12 +249,10 @@ public class Home extends AppCompatActivity {
     }
 
     public String convertToIso() {
-        //  String date = getDate(new Date().getTime()) + "";
 
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyyMMddHHmmss");
         dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-        // LogClass.e("dateShiv", "status :" +dateFormatGmt.format(new Date()) );
-
         return "" + dateFormatGmt.format(new Date());
     }
 
@@ -409,8 +320,7 @@ public class Home extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            // android_id
-            //  android_id="jigar_patel_111";
+
             String myResponse = "";
             String date = convertToIso() + "";
             String mainObj = "{\"startTime\": \"" + date + "\",\"stopTime\": \"\",\"deviceId\": \"" + "" + android_id + "" + "\"}";
@@ -440,11 +350,7 @@ public class Home extends AppCompatActivity {
             return myResponse;
         }
 
-        @Override
-        protected void onPostExecute(String result) {
-            LogClass.e("stsrtripLog", "result :" + result);
-            startMyService();
-        }
+
     }
 
     public class StopTrip extends AsyncTask<String, Void, String> {
@@ -454,10 +360,8 @@ public class Home extends AppCompatActivity {
             String tripId = SharedPrefHelper.getPrefsHelper().getPref(SharedPrefHelper.TRIP_ID);
             String myResponse = "";
             String date = convertToIso() + "";
-            // String mainObj = "{\"startTime\": \"\",\"stopTime\": \""+date+"\",\"deviceId\": \""+android_id+"\"}";
-            //   String mainObj = " {_id: \""+tripId+"\", startTime: \"\", stopTime: \""+date+"\", deviceId: \""+android_id+"\" } ";
-            String mainObj = "{ \"_id\": \"" + tripId + "\", \"startTime\": \"\",\"stopTime\": \"" + date + "\",\"deviceId\": \"" + android_id + "\"}";
 
+            String mainObj = "{ \"_id\": \"" + tripId + "\", \"startTime\": \"\",\"stopTime\": \"" + date + "\",\"deviceId\": \"" + android_id + "\"}";
 
             try {
                 String loginResponse = SharedPrefHelper.getPrefsHelper().getPref(SharedPrefHelper.CONFIG_RESPONSE_BODY, "");

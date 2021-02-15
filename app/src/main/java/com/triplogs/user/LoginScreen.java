@@ -44,7 +44,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public class LoginScreen extends AppCompatActivity {
 
     private ArrayList permissionsToRequest;
-    private ArrayList permissionsRejected = new ArrayList();
+    private  ArrayList permissionsRejected = new ArrayList();
     private ArrayList permissions = new ArrayList();
 
     private final static int ALL_PERMISSIONS_RESULT = 101;
@@ -352,63 +352,41 @@ public class LoginScreen extends AppCompatActivity {
                 try {
                     final String myResponse = response.body().string();
                     LogClass.e("onResponse", "body :" + myResponse);
-                    LoginScreen.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            materialProgressBar.setVisibility(View.GONE);
+                    LoginScreen.this.runOnUiThread(() -> {
+                        materialProgressBar.setVisibility(View.GONE);
 
-                            try {
-                                JSONObject jsonObject = new JSONObject(myResponse);
+                        try {
+                            JSONObject jsonObject = new JSONObject(myResponse);
 
-                                if(jsonObject.getBoolean("status")){
-                                    SharedPrefHelper.getPrefsHelper().setData(SharedPrefHelper.CONFIG_RESPONSE_BODY, myResponse);
-                                    JSONObject response = jsonObject.getJSONObject("response");
-                                    JSONObject project = response.getJSONObject("project");
-                                    JSONArray projectsmeta = project.getJSONArray("projectsmeta");
-                                    JSONObject version =projectsmeta.getJSONObject(0);
+                            if(jsonObject.getBoolean("status")){
+                                SharedPrefHelper.getPrefsHelper().setData(SharedPrefHelper.CONFIG_RESPONSE_BODY, myResponse);
+                                JSONObject response1 = jsonObject.getJSONObject("response");
+                                JSONObject project = response1.getJSONObject("project");
+                                JSONArray projectsmeta = project.getJSONArray("projectsmeta");
+                                JSONObject version =projectsmeta.getJSONObject(0);
 
 
-                                    LogClass.e("version", "version :" + version);
-                                    String versionCode = version.getString("metavalue");
-                                    LogClass.e("version", "version :" + versionCode + "== "+ApiConstant.Versions.CODE);
-                                    if(versionCode.trim().equals(ApiConstant.Versions.CODE)){
+                                LogClass.e("version", "version :" + version);
+                                String versionCode = version.getString("metavalue");
+                                LogClass.e("version", "version :" + versionCode + "== "+ApiConstant.Versions.CODE);
+                                if(versionCode.trim().equals(ApiConstant.Versions.CODE)){
 
-                                    Intent i = new Intent(LoginScreen.this, Home.class);
-                                    startActivity(i);
-                                    finish();
-                                    }else {
-                                        JSONObject versionInfo =projectsmeta.getJSONObject(1);
-                                        String message = versionInfo.getString("metavalue");
-                                        String link = project.getString("android_app_url");
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginScreen.this);
-                                        builder.setMessage(message)
-                                                .setCancelable(true)
-                                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                    public void onClick(DialogInterface dialog, int id) {
-                                                     //   dialog.dismiss();
-                                                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-                                                        startActivity(browserIntent);
-
-                                                    }
-                                                });
-
-                                        AlertDialog alert = builder.create();
-                                        alert.show();
-                                    }
-
-
-                                   // ApiConstant.Versions.CODE;
-
-
-
+                                Intent i = new Intent(LoginScreen.this, Home.class);
+                                startActivity(i);
+                                finish();
                                 }else {
-                                    String message = jsonObject.getString("message");
+                                    JSONObject versionInfo =projectsmeta.getJSONObject(1);
+                                    String message = versionInfo.getString("metavalue");
+                                    String link = project.getString("android_app_url");
                                     AlertDialog.Builder builder = new AlertDialog.Builder(LoginScreen.this);
                                     builder.setMessage(message)
                                             .setCancelable(true)
                                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int id) {
-                                                    dialog.dismiss();
+                                                 //   dialog.dismiss();
+                                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                                                    startActivity(browserIntent);
+
                                                 }
                                             });
 
@@ -416,15 +394,30 @@ public class LoginScreen extends AppCompatActivity {
                                     alert.show();
                                 }
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+
+                               // ApiConstant.Versions.CODE;
+
+
+
+                            }else {
+                                String message = jsonObject.getString("message");
+                                AlertDialog.Builder builder = new AlertDialog.Builder(LoginScreen.this);
+                                builder.setMessage(message)
+                                        .setCancelable(true)
+                                        .setPositiveButton("Ok", (dialog, id) -> dialog.dismiss());
+
+                                AlertDialog alert = builder.create();
+                                alert.show();
                             }
 
-
-                            //  progressDialog.dismiss();
-
-
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+
+
+                        //  progressDialog.dismiss();
+
+
                     });
                 } catch (IOException e) {
                     e.printStackTrace();
