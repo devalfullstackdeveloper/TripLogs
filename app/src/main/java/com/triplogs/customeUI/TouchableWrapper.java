@@ -5,18 +5,17 @@ import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
 
-
 public class TouchableWrapper extends FrameLayout {
 
-    interface TouchLitsner{
+    interface TouchLitsner {
         public void onToch();
         public void leaveToch();
     }
 
     TouchLitsner touchLitsner;
 
-    public void setOnTouchListner( TouchLitsner touchLitsner){
-        this.touchLitsner=touchLitsner;
+    public void setOnTouchListner(TouchLitsner touchLitsner) {
+        this.touchLitsner = touchLitsner;
     }
 
     public TouchableWrapper(Context context) {
