@@ -1,78 +1,44 @@
 package com.triplogs.user;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.LifecycleOwner;
-
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.provider.Settings;
-import android.provider.SyncStateContract;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.material.shape.CornerFamily;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+
 import com.jtv7.rippleswitchlib.RippleSwitch;
-import com.skydoves.powermenu.MenuAnimation;
-import com.skydoves.powermenu.OnMenuItemClickListener;
-import com.skydoves.powermenu.PowerMenu;
-import com.skydoves.powermenu.PowerMenuItem;
 import com.triplogs.R;
 import com.triplogs.helper.ApiConstant;
-import com.triplogs.helper.LocationForegroundService;
 import com.triplogs.helper.LogClass;
 import com.triplogs.helper.MyLocationService;
 import com.triplogs.helper.OkHttpWrapper;
 import com.triplogs.helper.SharedPrefHelper;
-import com.triplogs.helper.SingleShotLocationProvider;
-import com.triplogs.interfaces.LocationInterface;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.text.SimpleDateFormat;
-import java.time.DateTimeException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 import java.util.TimeZone;
 
 import okhttp3.Call;
 import okhttp3.Response;
-
-import static android.location.GpsStatus.GPS_EVENT_STARTED;
-import static android.location.GpsStatus.GPS_EVENT_STOPPED;
 
 public class Home extends AppCompatActivity {
 

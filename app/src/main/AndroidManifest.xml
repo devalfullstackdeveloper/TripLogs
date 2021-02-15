@@ -18,11 +18,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TripLogs">
-        <activity android:name=".user.LocationActivity"/>
+
         <activity android:name=".user.Home" />
-        <activity android:name=".user.LoginScreen"
-            android:windowSoftInputMode="adjustResize"
-            />
+        <activity
+            android:name=".user.LoginScreen"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,9 +31,7 @@
             </intent-filter>
         </activity>
 
-<!--        <service-->
-<!--            android:name=".helper.LocationForegroundService"-->
-<!--            android:foregroundServiceType="location" />-->
+
         <service
             android:name=".helper.MyLocationService"
             android:foregroundServiceType="location" />

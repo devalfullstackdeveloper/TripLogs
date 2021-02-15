@@ -1,36 +1,23 @@
 package com.triplogs.helper;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
-
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-import android.provider.Settings;
-import android.text.format.DateFormat;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
@@ -40,37 +27,26 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.triplogs.R;
-import com.triplogs.customeUI.MySupportMapFragment;
 import com.triplogs.model.LocationData;
 import com.triplogs.user.Home;
-import com.triplogs.user.LocationActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.Locale;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import static android.app.NotificationManager.IMPORTANCE_HIGH;
 import static com.triplogs.MyApplication.CHANNEL_1_ID;
-import static com.triplogs.MyApplication.getApp;
 
 /**
  * Created by roberto on 9/29/16.
