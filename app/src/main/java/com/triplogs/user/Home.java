@@ -80,18 +80,25 @@ public class Home extends AppCompatActivity {
                         String speed = intent.getStringExtra("speed");
                         if (rippleSwitch.isChecked()) {
 
-                            tvAltitude.setText(" "+altitude + ",");
-                            tvHeading.setText(" "+heading + ",");
-                            tvLatitude.setText(" "+Lat + ",");
-                            tvLongitude.setText(" "+Long + ",");
-                            tvAccuracy.setText(" "+accurarcy + ",");
-                            tvTimestamp.setText(" "+timestamp + ",");
+                            String alt = " " + altitude + ",";
+                            String head = " " + heading + ",";
+                            String lat = " " + Lat + ",";
+                            String longi = " " + Long + ",";
+                            String acc = " " + accurarcy + ",";
+                            String time = " " + timestamp + ",";
+                            tvAltitude.setText(alt);
+                            tvHeading.setText(head);
+                            tvLatitude.setText(lat);
+                            tvLongitude.setText(longi);
+                            tvAccuracy.setText(acc);
+                            tvTimestamp.setText(time);
 
                             if (radioButton1.isChecked()) {
                                 tvSpeed.setText(speed);
                             } else {
                                 float sp = (float) (Float.parseFloat(speed) / 1.609);
-                                tvSpeed.setText(" "+sp + "");
+                                String speeds = " " + sp;
+                                tvSpeed.setText(speeds);
                             }
 
 
@@ -110,7 +117,8 @@ public class Home extends AppCompatActivity {
                     cardView.setCardBackgroundColor(getResources().getColor(R.color.sky_blue));
                     @SuppressLint("HardwareIds")
                     String android_id = Settings.Secure.getString(Home.this.getContentResolver(), Settings.Secure.ANDROID_ID);
-                    tvDeviceId.setText(" "+android_id + ",");
+                    android_id = " " + android_id + ",";
+                    tvDeviceId.setText(android_id);
                     startMyService();
                 }
             }
@@ -119,21 +127,15 @@ public class Home extends AppCompatActivity {
         }
 
 
-        radioButton1.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                radioButton1.setChecked(true);
-                radioButton2.setChecked(false);
-                return true;
-            }
+        radioButton1.setOnTouchListener((v, event) -> {
+            radioButton1.setChecked(true);
+            radioButton2.setChecked(false);
+            return true;
         });
-        radioButton2.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                radioButton2.setChecked(true);
-                radioButton1.setChecked(false);
-                return true;
-            }
+        radioButton2.setOnTouchListener((v, event) -> {
+            radioButton2.setChecked(true);
+            radioButton1.setChecked(false);
+            return true;
         });
 
         IntentFilter filter2 = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
@@ -141,12 +143,6 @@ public class Home extends AppCompatActivity {
         registerReceiver(gpsSwitchStateReceiver, filter2);
 
 
-    }
-
-
-    private String getDate(long time) {
-        SimpleDateFormat simpleformat = new SimpleDateFormat("yyyyMMddHHmmss");
-        return simpleformat.format(time);
     }
 
 
@@ -173,7 +169,7 @@ public class Home extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //checkOnOf();
-        if(rippleSwitch.isChecked()){
+        if (rippleSwitch.isChecked()) {
             checkOnOf();
         }
     }
@@ -340,13 +336,13 @@ public class Home extends AppCompatActivity {
     }
 
     public String convertToIso() {
-      //  String date = getDate(new Date().getTime()) + "";
+        //  String date = getDate(new Date().getTime()) + "";
 
         SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyyMMddHHmmss");
         dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-       // LogClass.e("dateShiv", "status :" +dateFormatGmt.format(new Date()) );
+        // LogClass.e("dateShiv", "status :" +dateFormatGmt.format(new Date()) );
 
-        return ""+dateFormatGmt.format(new Date());
+        return "" + dateFormatGmt.format(new Date());
     }
 
     private void getDuration() {
@@ -392,7 +388,6 @@ public class Home extends AppCompatActivity {
                     }
 
 
-
                     @Override
                     public void checkInterNet(boolean status) {
 
@@ -417,7 +412,7 @@ public class Home extends AppCompatActivity {
             // android_id
             //  android_id="jigar_patel_111";
             String myResponse = "";
-                String date =  convertToIso() + "";
+            String date = convertToIso() + "";
             String mainObj = "{\"startTime\": \"" + date + "\",\"stopTime\": \"\",\"deviceId\": \"" + "" + android_id + "" + "\"}";
             LogClass.e("stsrtripLog", "mainObj :" + mainObj);
 
@@ -458,7 +453,7 @@ public class Home extends AppCompatActivity {
         protected String doInBackground(String... params) {
             String tripId = SharedPrefHelper.getPrefsHelper().getPref(SharedPrefHelper.TRIP_ID);
             String myResponse = "";
-            String date =  convertToIso()  + "";
+            String date = convertToIso() + "";
             // String mainObj = "{\"startTime\": \"\",\"stopTime\": \""+date+"\",\"deviceId\": \""+android_id+"\"}";
             //   String mainObj = " {_id: \""+tripId+"\", startTime: \"\", stopTime: \""+date+"\", deviceId: \""+android_id+"\" } ";
             String mainObj = "{ \"_id\": \"" + tripId + "\", \"startTime\": \"\",\"stopTime\": \"" + date + "\",\"deviceId\": \"" + android_id + "\"}";
@@ -484,10 +479,6 @@ public class Home extends AppCompatActivity {
             return myResponse;
         }
 
-        @Override
-        protected void onPostExecute(String result) {
-            LogClass.e("stsrtripLog", "result :" + result);
-        }
     }
 
 
@@ -497,12 +488,12 @@ public class Home extends AppCompatActivity {
         boolean network_enabled = false;
         try {
             gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
         }
 
         try {
             network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
         }
 
         if (!gps_enabled && !network_enabled) {
@@ -510,12 +501,7 @@ public class Home extends AppCompatActivity {
 
             new AlertDialog.Builder(Home.this)
                     .setMessage("Please enable location from your phone setting")
-                    .setPositiveButton("allow", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                        }
-                    })
+                    .setPositiveButton("allow", (dialogInterface, i) -> startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
                     .setCancelable(false)
                     .show();
 
@@ -530,11 +516,12 @@ public class Home extends AppCompatActivity {
 
             @SuppressLint("HardwareIds")
             String android_id = Settings.Secure.getString(Home.this.getContentResolver(), Settings.Secure.ANDROID_ID);
-            tvDeviceId.setText(" "+android_id+",");
+            android_id=" " + android_id + ",";
+            tvDeviceId.setText(android_id);
         }
     }
 
-    private BroadcastReceiver gpsSwitchStateReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver gpsSwitchStateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
@@ -545,7 +532,7 @@ public class Home extends AppCompatActivity {
                 boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
                 if (isGpsEnabled || isNetworkEnabled) {
-                    //   Toast.makeText(getApplicationContext(),"on",Toast.LENGTH_LONG).show();
+
                     isLocationOn = true;
                     if (rippleSwitch.isChecked()) {
                         SharedPrefHelper.getPrefsHelper().setData(SharedPrefHelper.PREF_IS_CHECK, "true");
@@ -555,25 +542,13 @@ public class Home extends AppCompatActivity {
 
                         @SuppressLint("HardwareIds")
                         String android_id = Settings.Secure.getString(Home.this.getContentResolver(), Settings.Secure.ANDROID_ID);
-                        tvDeviceId.setText(" "+android_id+",");
+                        android_id = " " + android_id + ",";
+                        tvDeviceId.setText(android_id);
                     }
                 } else {
 
                     isLocationOn = false;
-//                    SharedPrefHelper.getPrefsHelper().setData(SharedPrefHelper.PREF_IS_CHECK, "false");
-//                    cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
-//                    stopMyService();
-//                    stopTrip();
-//                    tvSpeed.setText("");
-//                    tvAltitude.setText("");
-//                    tvHeading.setText("");
-//                    tvLatitude.setText("");
-//                    tvLongitude.setText("");
-//                    tvAccuracy.setText("");
-//                    tvTimestamp.setText("");
-//                    tvDeviceId.setText("");
-//
-//                    rippleSwitch.setChecked(false);
+
                 }
             }
         }

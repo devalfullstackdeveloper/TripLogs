@@ -99,7 +99,6 @@ public class LoginScreen extends AppCompatActivity {
         ed6 = findViewById(R.id.ed_6);
         materialProgressBar = findViewById(R.id.material_design_progressbar);
         imgSetting = findViewById(R.id.img_setting);
-//        Glide.with(LoginScreen.this).load(R.raw.webview).asGif().into(btnAlert);
     }
 
     private void onChange() {
@@ -186,14 +185,11 @@ public class LoginScreen extends AppCompatActivity {
                     ed4.clearFocus();
                     ed3.requestFocus();
                     ed3.setCursorVisible(true);
-
                 }
                 if (txt.length() == 1) {
                     ed4.clearFocus();
                     ed5.requestFocus();
                     ed5.setCursorVisible(true);
-
-
                 }
                 checkValid();
             }
@@ -212,13 +208,11 @@ public class LoginScreen extends AppCompatActivity {
                     ed5.clearFocus();
                     ed4.requestFocus();
                     ed4.setCursorVisible(true);
-
                 }
                 if (txt.length() == 1) {
                     ed5.clearFocus();
                     ed6.requestFocus();
                     ed6.setCursorVisible(true);
-
                 }
                 checkValid();
             }
@@ -239,10 +233,7 @@ public class LoginScreen extends AppCompatActivity {
                     ed5.setCursorVisible(true);
 
                 }
-                if (txt.length() == 1) {
 
-
-                }
                 checkValid();
             }
         });
@@ -307,12 +298,9 @@ public class LoginScreen extends AppCompatActivity {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if (shouldShowRequestPermissionRationale((String) permissionsRejected.get(0))) {
                             showMessageOKCancel("These permissions are mandatory for the application. Please allow access.",
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                requestPermissions((String[]) permissionsRejected.toArray(new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
-                                            }
+                                    (dialog, which) -> {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            requestPermissions((String[]) permissionsRejected.toArray(new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
                                         }
                                     });
                             return;
@@ -338,7 +326,6 @@ public class LoginScreen extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // locationTrack.stopListener();
     }
 
 

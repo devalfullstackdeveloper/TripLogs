@@ -14,24 +14,9 @@ public class ApiConstant {
 
     public class ApiKeys {
 
-        public static final String STATUS = "status";
-        public static final String MESSAGE = "message";
-        public static final String DATA = "data";
-        public static final String STATE_ID = "state_id";
-
         public static final String SECRET_CODE = "secret_code";
         public static final String PROJECT_ID = "project_id";
-        public static final String TRIP_ID = "tripId";
-        public static final String SPEED = "speed";
-        public static final String ALTITUDE = "altitude";
-        public static final String HEADING = "heading";
-        public static final String LATITUDE = "latitude";
-        public static final String LONGITUDE = "longitude";
-        public static final String ACCURACY = "accuracy";
-        public static final String TIMESTAMP = "timestamp";
-        public static final String START_TIME = "startTime";
-        public static final String STOP_TIME = "stopTime";
-        public static final String DEVICE_ID = "deviceId";
+
     }
 
 
