@@ -350,7 +350,12 @@ public class Home extends AppCompatActivity {
             return myResponse;
         }
 
-
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+           // checkOnOf();
+            startMyService();
+        }
     }
 
     public class StopTrip extends AsyncTask<String, Void, String> {
