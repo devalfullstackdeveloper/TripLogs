@@ -40,8 +40,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     //okHttpRequest
-    implementation 'com.squareup.okhttp3:okhttp:3.14.6'
-
+    //implementation 'com.squareup.okhttp3:okhttp:3.14.6'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.5.0'
     // switch
     implementation 'com.github.jtv7:RippleSwitch:1.0'
 

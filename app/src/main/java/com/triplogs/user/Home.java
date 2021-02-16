@@ -353,7 +353,6 @@ public class Home extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-           // checkOnOf();
             startMyService();
         }
     }
