@@ -91,9 +91,11 @@ public class Home extends AppCompatActivity {
                         tvTimestamp.setText(time);
 
                         if (radioButton1.isChecked()) {
-                            tvSpeed.setText(speed);
+                            float sp = (float) (Float.parseFloat(speed) / 3.6);
+                            String speeds = " " + sp;
+                            tvSpeed.setText(speeds);
                         } else {
-                            float sp = (float) (Float.parseFloat(speed) / 1.609);
+                            float sp = (float) (Float.parseFloat(speed) / 2.2369362920544);
                             String speeds = " " + sp;
                             tvSpeed.setText(speeds);
                         }

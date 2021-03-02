@@ -1,6 +1,7 @@
 package com.triplogs.helper;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -41,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -62,12 +64,12 @@ public class MyLocationService extends Service implements
     String channelName = "My Background Service";
     Context context;
 
-    GoogleMap mGoogleMap;
+
 
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
-    Marker mCurrLocationMarker;
+
 
 
     @Override
@@ -90,9 +92,7 @@ public class MyLocationService extends Service implements
                 context = this;
                 contTimer = Integer.parseInt("" + durations.trim().charAt(0));
                 Timer timer = new Timer();
-                timer.schedule(new TimerClass(), 0, Integer.parseInt(durations));
-                timer.schedule(new TimerClassTwo(), 0, 1000);
-
+                timer.schedule(new TimerClassTwo(), 0, 1300);
                 String CHANNEL_ONE_ID = "com.triplogs";
                 String CHANNEL_ONE_NAME = "Channel One";
                 NotificationChannel notificationChannel = null;
@@ -120,12 +120,21 @@ public class MyLocationService extends Service implements
 
 
                 NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-                Notification notification = notificationBuilder.setOngoing(true)
-                        .setSmallIcon(R.drawable.ic_launcher_background)
-                        .setContentTitle("App is running in background")
-                        .setPriority(NotificationManager.IMPORTANCE_MIN)
-                        .setCategory(Notification.CATEGORY_SERVICE)
-                        .build();
+                Notification notification = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    notification = notificationBuilder.setOngoing(true)
+                            .setSmallIcon(R.drawable.ic_launcher_background)
+                            .setContentTitle("App is running in background")
+                            .setPriority(NotificationManager.IMPORTANCE_MIN)
+                            .setCategory(Notification.CATEGORY_SERVICE)
+                            .build();
+                }else {
+                    notification = notificationBuilder.setOngoing(true)
+                            .setSmallIcon(R.drawable.ic_launcher_background)
+                            .setContentTitle("App is running in background")
+                            .setCategory(Notification.CATEGORY_SERVICE)
+                            .build();
+                }
                 startForeground(2, notification);
 
                 mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -203,7 +212,7 @@ public class MyLocationService extends Service implements
                 == PackageManager.PERMISSION_GRANTED) {
             try {
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
 
@@ -234,23 +243,6 @@ public class MyLocationService extends Service implements
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
-//        if (mCurrLocationMarker != null) {
-//            mCurrLocationMarker.remove();
-//        }
-
-        //Place current location marker
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-//        MarkerOptions markerOptions = new MarkerOptions();
-//        markerOptions.position(latLng);
-//        markerOptions.title("Current Position");
-//        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-//        mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
-        // mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 40));
-
-        //move map camera
-        //  mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
-
-        LogClass.e("onLocationChanged", "" + location);
 
         Intent intent = new Intent("locationData");
         intent.putExtra("Lat", "" + location.getLatitude());
@@ -267,27 +259,15 @@ public class MyLocationService extends Service implements
             intent.putExtra("heading", heading);
         }
 
-
-        // LogClass.e("NotificationUpdateNotificationUpdate", "tttt :" + getDate(location.getTime()));
         sendBroadcast(intent);
-
         NotificationUpdate("Lat: " + location.getLatitude() + ",Long: " + location.getLongitude() + ",speed: " + location.getSpeed());
     }
 
-    private String getDate(long time) {
-        SimpleDateFormat simpleformat = new SimpleDateFormat("yyyyMMddhhmmss");
-        LogClass.e("SimpleDateFormat",""+simpleformat.format(time));
-
-        return simpleformat.format(time);
-    }
 
     public String convertToIso() {
-        //  String date = getDate(new Date().getTime()) + "";
-
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyyMMddHHmmss");
         dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-        // LogClass.e("dateShiv", "status :" +dateFormatGmt.format(new Date()) );
-
         return ""+dateFormatGmt.format(new Date());
     }
 
@@ -314,27 +294,12 @@ public class MyLocationService extends Service implements
         return (rad * 180.0 / Math.PI);
     }
 
-    class TimerClass extends TimerTask {
-        public void run() {
 
-            if (isStart) {
-                LogClass.e("myfunction", "------aa----");
-                if (checkOnOf()) {
-                    //  setTripLogs();
-                }
-
-            } else {
-                cancel();
-            }
-
-        }
-    }
 
     int obj = 0;
 
     class TimerClassTwo extends TimerTask {
         public void run() {
-
 
             if (isStart) {
                 if (mLastLocation != null) {
@@ -344,20 +309,37 @@ public class MyLocationService extends Service implements
                     accurarcy = mLastLocation.getAccuracy() + "";
                     timestamp =convertToIso() + "";
                     altitude = mLastLocation.getAltitude() + "";
-                    speed = mLastLocation.getSpeed() + "";
+
+                    Random rand = new Random();
+                    int randomNum = rand.nextInt((13 - 10) + 10) + 10;
+                    speed =  randomNum+ "" ; //* 3.6 +
+
+                    if(obj==0){
+                        speed ="2.7777777778";
+                    }else if(obj==1) {
+                        speed ="5.5555555556";
+                    }else {
+                        obj=0;
+                        speed ="8.3333333333";
+                    }
+
+                    obj++;
+
+                    LogClass.e("timestamp","timestamp : "+timestamp);
+                    LogClass.e("timestamp","speed : "+speed);
 
                     String tripId = SharedPrefHelper.getPrefsHelper().getPref(SharedPrefHelper.TRIP_ID);
                     if(heading.trim().equals("")){
                         heading="0.0";
                     }
 
-                    if(accurarcy == null || accurarcy.trim().equals("")  || accurarcy =="null"){
+                    if(accurarcy == null || accurarcy.trim().equals("")  || accurarcy.equals("null")){
                         accurarcy="-1";
                     }
                     LocationData locationData = new LocationData(tripId, speed, altitude, heading, lat, longi, accurarcy, timestamp);
                     queue.add(locationData);
 
-                    if (obj == contTimer) {
+                    if (obj == contTimer-1) {
                         obj = 0;
                         LogClass.e("LocationData", "call function----");
                         setTripLogs();
@@ -367,25 +349,7 @@ public class MyLocationService extends Service implements
                         obj++;
                     }
 
-
-//                    String durations = SharedPrefHelper.getPrefsHelper().getPref(SharedPrefHelper.API_CALL_DURATION, "7000");
-//                    int seconds = (int) ((Integer.parseInt(durations) / 1000) % 60);
-//                    LogClass.e("myfunction", "-----bb--add items---" + seconds);
-//                    String tripId = SharedPrefHelper.getPrefsHelper().getPref(SharedPrefHelper.TRIP_ID);
-//                    if (tripId != null) {
-//                        if (queue.size() < seconds && !lat.equals("")) {
-//                            LocationData locationData = new LocationData(tripId, speed, altitude, heading, lat, longi, accurarcy, timestamp);
-//                            queue.add(locationData);
-//                        } else {
-//                            if (!lat.equals("")) {
-//                                queue.remove();
-//                                LocationData locationData = new LocationData(tripId, speed, altitude, heading, lat, longi, accurarcy, timestamp);
-//                                queue.add(locationData);
-//                            }
-//
-//                        }
-//                    }
-                }
+               }
 
 
             } else {
