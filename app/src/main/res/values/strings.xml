@@ -15,8 +15,8 @@
     <string name="accuracy">Accuracy: </string>
     <string name="timestamp">Timestamp: </string>
     <string name="v_1_0_1">V 1.0.1</string>
-    <string name="mhp">MPH</string>
-    <string name="kmh">KMH</string>
+    <string name="mph">MPH</string>
+    <string name="kph">KPH</string>
     <string name="device_id">DeviceID:</string>
     <string name="do_you_want_to_change_your_server_configuration">Do you want to change your server configuration ?</string>
 </resources>
