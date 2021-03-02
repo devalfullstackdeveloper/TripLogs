@@ -297,6 +297,7 @@ public class MyLocationService extends Service implements
 
 
     int obj = 0;
+    int temp = 0;
 
     class TimerClassTwo extends TimerTask {
         public void run() {
@@ -314,16 +315,16 @@ public class MyLocationService extends Service implements
                     int randomNum = rand.nextInt((13 - 10) + 10) + 10;
                     speed =  randomNum+ "" ; //* 3.6 +
 
-                    if(obj==0){
+                    if(temp==0){
                         speed ="2.7777777778";
-                    }else if(obj==1) {
+                    }else if(temp==1) {
                         speed ="5.5555555556";
                     }else {
-                        obj=0;
+                        temp=0;
                         speed ="8.3333333333";
                     }
 
-                    obj++;
+                    temp++;
 
                     LogClass.e("timestamp","timestamp : "+timestamp);
                     LogClass.e("timestamp","speed : "+speed);
@@ -336,6 +337,7 @@ public class MyLocationService extends Service implements
                     if(accurarcy == null || accurarcy.trim().equals("")  || accurarcy.equals("null")){
                         accurarcy="-1";
                     }
+
                     LocationData locationData = new LocationData(tripId, speed, altitude, heading, lat, longi, accurarcy, timestamp);
                     queue.add(locationData);
 
