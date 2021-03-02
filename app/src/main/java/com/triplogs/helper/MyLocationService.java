@@ -310,7 +310,7 @@ public class MyLocationService extends Service implements
                     accurarcy = mLastLocation.getAccuracy() + "";
                     timestamp =convertToIso() + "";
                     altitude = mLastLocation.getAltitude() + "";
-                    if(mLastLocation.getSpeed() <= 0){
+                    if(mLastLocation.getSpeed() < 0){
                         speed="0";
                     }else {
                         speed = (mLastLocation.getSpeed() * 3.6)+"";
