@@ -91,11 +91,11 @@ public class Home extends AppCompatActivity {
                         tvTimestamp.setText(time);
 
                         if (radioButton1.isChecked()) {
-                            float sp = (float) (Float.parseFloat(speed) / 3.6);
+                            float sp = (float) (Float.parseFloat(speed) / 2.2369362920544);
                             String speeds = " " + sp;
                             tvSpeed.setText(speeds);
                         } else {
-                            float sp = (float) (Float.parseFloat(speed) / 2.2369362920544);
+                            float sp = (float) (Float.parseFloat(speed) / 3.6);
                             String speeds = " " + sp;
                             tvSpeed.setText(speeds);
                         }
@@ -201,8 +201,8 @@ public class Home extends AppCompatActivity {
             View dialogView = inflater.inflate(R.layout.alert_label_editor, null);
             builder.setView(dialogView);
 
-            TextView textYes =  dialogView.findViewById(R.id.textView_yes);
-            TextView textNo =  dialogView.findViewById(R.id.textView_no);
+            TextView textYes = dialogView.findViewById(R.id.textView_yes);
+            TextView textNo = dialogView.findViewById(R.id.textView_no);
 
             AlertDialog alert = builder.create();
             alert.setCancelable(false);
@@ -325,6 +325,7 @@ public class Home extends AppCompatActivity {
 
             String myResponse = "";
             String date = convertToIso() + "";
+            SharedPrefHelper.getPrefsHelper().setData(SharedPrefHelper.START_TRIP_DATE,date);
             String mainObj = "{\"startTime\": \"" + date + "\",\"stopTime\": \"\",\"deviceId\": \"" + "" + android_id + "" + "\"}";
             LogClass.e("stsrtripLog", "mainObj :" + mainObj);
 
@@ -364,10 +365,14 @@ public class Home extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             String tripId = SharedPrefHelper.getPrefsHelper().getPref(SharedPrefHelper.TRIP_ID);
-            String myResponse = "";
-            String date = convertToIso() + "";
+            String startTripDate = SharedPrefHelper.getPrefsHelper().getPref(SharedPrefHelper.START_TRIP_DATE);
 
-            String mainObj = "{ \"_id\": \"" + tripId + "\", \"startTime\": \"\",\"stopTime\": \"" + date + "\",\"deviceId\": \"" + android_id + "\"}";
+
+            String myResponse = "";
+            String date = convertToIso() + ""; //startTime
+
+            //String mainObj = "{ \"_id\": \"" + tripId + "\", \"startTime\": \"\",\"stopTime\": \"" + date + "\",\"deviceId\": \"" + android_id + "\"}";
+            String mainObj = "{\"_id\": \""+tripId+"\",\"startTime\": \""+startTripDate+"\", \"stopTime\": \""+date+"\", \"deviceId\":\""+android_id+"\"}";
 
             try {
                 String loginResponse = SharedPrefHelper.getPrefsHelper().getPref(SharedPrefHelper.CONFIG_RESPONSE_BODY, "");
@@ -426,7 +431,7 @@ public class Home extends AppCompatActivity {
 
             @SuppressLint("HardwareIds")
             String android_id = Settings.Secure.getString(Home.this.getContentResolver(), Settings.Secure.ANDROID_ID);
-            android_id=" " + android_id + ",";
+            android_id = " " + android_id + ",";
             tvDeviceId.setText(android_id);
         }
     }

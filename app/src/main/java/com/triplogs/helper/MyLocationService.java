@@ -297,7 +297,7 @@ public class MyLocationService extends Service implements
 
 
     int obj = 0;
-    int temp = 0;
+    //int temp = 0;
 
     class TimerClassTwo extends TimerTask {
         public void run() {
@@ -310,21 +310,26 @@ public class MyLocationService extends Service implements
                     accurarcy = mLastLocation.getAccuracy() + "";
                     timestamp =convertToIso() + "";
                     altitude = mLastLocation.getAltitude() + "";
-
-                    Random rand = new Random();
-                    int randomNum = rand.nextInt((13 - 10) + 10) + 10;
-                    speed =  randomNum+ "" ; //* 3.6 +
-
-                    if(temp==0){
-                        speed ="2.7777777778";
-                    }else if(temp==1) {
-                        speed ="5.5555555556";
+                    if(mLastLocation.getSpeed() <= 0){
+                        speed="0";
                     }else {
-                        temp=0;
-                        speed ="8.3333333333";
+                        speed = (mLastLocation.getSpeed() * 3.6)+"";
                     }
 
-                    temp++;
+//                    Random rand = new Random();
+//                    int randomNum = rand.nextInt((13 - 10) + 10) + 10;
+//                    speed =  randomNum+ "" ; //* 3.6 +
+
+//                    if(temp==0){
+//                        speed =(2.7777777778 * 3.6) +"" ;
+//                    }else if(temp==1) {
+//                        speed = (5.5555555556 * 3.6) +"" ;
+//                    }else {
+//                        temp=0;
+//                        speed =(8.3333333333 * 3.6) +"" ;
+//                    }
+//
+//                    temp++;
 
                     LogClass.e("timestamp","timestamp : "+timestamp);
                     LogClass.e("timestamp","speed : "+speed);

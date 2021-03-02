@@ -14,6 +14,7 @@ public class SharedPrefHelper {
     public static final String CONFIG_RESPONSE_BODY = "pref_config_response_body";
     public static final String API_CALL_DURATION = "pref_apiCallDuration";
     public static final String TRIP_ID = "pref_trip_id";
+    public static final String START_TRIP_DATE = "pref_start_trip_date";
 
 
     private static com.triplogs.helper.SharedPrefHelper instance;
