@@ -15,6 +15,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 
 import androidx.annotation.NonNull;
@@ -27,9 +28,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.triplogs.R;
 import com.triplogs.model.LocationData;
 import com.triplogs.user.Home;
@@ -42,7 +40,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Random;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -65,11 +62,9 @@ public class MyLocationService extends Service implements
     Context context;
 
 
-
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
-
 
 
     @Override
@@ -92,7 +87,36 @@ public class MyLocationService extends Service implements
                 context = this;
                 contTimer = Integer.parseInt("" + durations.trim().charAt(0));
                 Timer timer = new Timer();
-                timer.schedule(new TimerClassTwo(), 0, 1300);
+                timer.schedule(new TimerClassTwo(), 0, 1000);
+
+//                final Handler handler = new Handler();
+//                final int delay = 1000; // 1000 milliseconds == 1 second
+//
+//                handler.postDelayed(new Runnable() {
+//                    public void run() {
+//                        timestamp =convertToIso() + "";
+//                        LogClass.e("timestamp","timestamp : "+timestamp);
+//                        handler.postDelayed(this, delay);
+//                    }
+//                }, delay);
+
+
+//                Handler h = new Handler();
+//                final Runnable r = new Runnable() {
+//                    int count = 0;
+//                    @Override
+//                    public void run() {
+//                        count++;
+//
+//
+//                       // LogClass.e("timestamp","timestamp : "+""+count*1.8);
+//                        timestamp =convertToIso() + "";
+//                        LogClass.e("timestamp","timestamp : "+timestamp);
+//                        h.postDelayed(this, 1000); //ms
+//                    }
+//                };
+//                h.postDelayed(r, 1000);
+
                 String CHANNEL_ONE_ID = "com.triplogs";
                 String CHANNEL_ONE_NAME = "Channel One";
                 NotificationChannel notificationChannel = null;
@@ -128,7 +152,7 @@ public class MyLocationService extends Service implements
                             .setPriority(NotificationManager.IMPORTANCE_MIN)
                             .setCategory(Notification.CATEGORY_SERVICE)
                             .build();
-                }else {
+                } else {
                     notification = notificationBuilder.setOngoing(true)
                             .setSmallIcon(R.drawable.ic_launcher_background)
                             .setContentTitle("App is running in background")
@@ -238,7 +262,7 @@ public class MyLocationService extends Service implements
     String speed = "";
     String heading = "";
     Queue<LocationData> queue = new LinkedList<>();
-    Queue<LocationData> queue2 ;
+    Queue<LocationData> queue2;
 
     @Override
     public void onLocationChanged(Location location) {
@@ -255,7 +279,7 @@ public class MyLocationService extends Service implements
 
         if (!lat.equals("") && !longi.equals("")) {
             float d = (float) distance(Double.parseDouble(lat), Double.parseDouble(longi), location.getLatitude(), location.getLongitude());
-            heading =( d + 0.0)+"" ;
+            heading = (d + 0.0) + "";
             intent.putExtra("heading", heading);
         }
 
@@ -268,9 +292,8 @@ public class MyLocationService extends Service implements
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyyMMddHHmmss");
         dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-        return ""+dateFormatGmt.format(new Date());
+        return "" + dateFormatGmt.format(new Date());
     }
-
 
 
     private double distance(double lat1, double lon1, double lat2, double lon2) {
@@ -295,7 +318,6 @@ public class MyLocationService extends Service implements
     }
 
 
-
     int obj = 0;
     //int temp = 0;
 
@@ -304,59 +326,53 @@ public class MyLocationService extends Service implements
 
             if (isStart) {
                 if (mLastLocation != null) {
-
-                    lat = mLastLocation.getLatitude() + "";
-                    longi = mLastLocation.getLongitude() + "";
-                    accurarcy = mLastLocation.getAccuracy() + "";
-                    timestamp =convertToIso() + "";
-                    altitude = mLastLocation.getAltitude() + "";
-                    if(mLastLocation.getSpeed() < 0){
-                        speed="0";
-                    }else {
-                        speed = (mLastLocation.getSpeed() * 3.6)+"";
-                    }
-
-//                    Random rand = new Random();
-//                    int randomNum = rand.nextInt((13 - 10) + 10) + 10;
-//                    speed =  randomNum+ "" ; //* 3.6 +
-
-//                    if(temp==0){
-//                        speed =(2.7777777778 * 3.6) +"" ;
-//                    }else if(temp==1) {
-//                        speed = (5.5555555556 * 3.6) +"" ;
-//                    }else {
-//                        temp=0;
-//                        speed =(8.3333333333 * 3.6) +"" ;
-//                    }
-//
-//                    temp++;
-
-                    LogClass.e("timestamp","timestamp : "+timestamp);
-                    LogClass.e("timestamp","speed : "+speed);
-
-                    String tripId = SharedPrefHelper.getPrefsHelper().getPref(SharedPrefHelper.TRIP_ID);
-                    if(heading.trim().equals("")){
-                        heading="0.0";
-                    }
-
-                    if(accurarcy == null || accurarcy.trim().equals("")  || accurarcy.equals("null")){
-                        accurarcy="-1";
-                    }
-
-                    LocationData locationData = new LocationData(tripId, speed, altitude, heading, lat, longi, accurarcy, timestamp);
-                    queue.add(locationData);
-
-                    if (obj == contTimer-1) {
-                        obj = 0;
-                        LogClass.e("LocationData", "call function----");
-                        setTripLogs();
-
+                    String temp = convertToIso() + "";
+                    if (timestamp.equals(temp)) {
+                        timestamp = temp;
                     } else {
-                        LogClass.e("LocationData", "call function--" + contTimer + "==" + obj);
-                        obj++;
+                        timestamp = temp;
+                        LogClass.e("timestamp", "timestamp : " + timestamp);
+                        lat = mLastLocation.getLatitude() + "";
+                        longi = mLastLocation.getLongitude() + "";
+                        accurarcy = mLastLocation.getAccuracy() + "";
+                        timestamp = convertToIso() + "";
+                        altitude = mLastLocation.getAltitude() + "";
+                        if (mLastLocation.getSpeed() < 0) {
+                            speed = "0";
+                        } else {
+                            speed = (mLastLocation.getSpeed() * 3.6) + "";
+                        }
+
+
+                        LogClass.e("timestamp", "timestamp : " + timestamp);
+                        LogClass.e("timestamp", "speed : " + speed);
+
+                        String tripId = SharedPrefHelper.getPrefsHelper().getPref(SharedPrefHelper.TRIP_ID);
+                        if (heading.trim().equals("")) {
+                            heading = "0.0";
+                        }
+
+                        if (accurarcy == null || accurarcy.trim().equals("") || accurarcy.equals("null")) {
+                            accurarcy = "-1";
+                        }
+
+                        LocationData locationData = new LocationData(tripId, speed, altitude, heading, lat, longi, accurarcy, timestamp);
+                        queue.add(locationData);
+
+                        if (obj == contTimer - 1) {
+                            obj = 0;
+                            LogClass.e("LocationData", "call function----");
+                            setTripLogs();
+
+                        } else {
+                            LogClass.e("LocationData", "call function--" + contTimer + "==" + obj);
+                            obj++;
+                        }
+
                     }
 
-               }
+
+                }
 
 
             } else {
@@ -379,7 +395,7 @@ public class MyLocationService extends Service implements
         String concatStr = "";
         int i = 0;
         int size = queue.size() - 1;
-        queue2=queue;
+        queue2 = queue;
         for (LocationData locationData : queue2) {
             if (i == 0) {
                 String obj = "{\n" +
@@ -439,7 +455,7 @@ public class MyLocationService extends Service implements
                 try {
                     final String myResponse = okHttpWrapper.post(url, mainObj.replace(" ", ""));
                     LogClass.e("tripLog", "body :" + myResponse);
-                    mainObj="";
+                    mainObj = "";
                     queue.removeAll(queue);
                 } catch (IOException e) {
                     e.printStackTrace();
